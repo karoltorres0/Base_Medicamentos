@@ -1,0 +1,53 @@
+import psycopg2
+from psycopg2 import Error
+
+def conectar():
+    try:
+        dbname = 'Base_Datos_Medicamentos'
+        user = 'postgres'
+        password = '123456789'
+        host = 'localhost'  
+
+        conexion = psycopg2.connect(dbname=dbname, user=user, password=password, host=host)
+        print("Conexión exitosa")
+
+        return conexion
+
+    except Error as e:
+        print("Error al conectar a la base de datos:", e)
+        return None
+
+def consultar_medicamentos(conexion):
+    try:
+        cursor = conexion.cursor()
+
+        consulta = "SELECT * FROM Medicamento;"
+
+        cursor.execute(consulta)
+
+        datos = cursor.fetchall()
+
+        for fila in datos:
+            print(fila)
+
+    except Error as e:
+        print("Error al ejecutar la consulta:", e)
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+def main():
+
+    conexion = conectar()
+
+    if conexion:
+
+        consultar_medicamentos(conexion)
+
+        conexion.close()
+        print("Conexión cerrada")
+
+if __name__ == "__main__":
+    main()
