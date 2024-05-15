@@ -1,16 +1,21 @@
 CREATE TABLE Medicamento (
-    expediente SERIAL PRIMARY KEY,
-    IUM INTEGER,
-    producto VARCHAR(50),
-    descripcioncomercial varchar (50),
+    expediente varchar (50) PRIMARY KEY,
+    IUM varchar (50),
+    producto VARCHAR(100),
+    descripcioncomercial varchar (500),
     atc VARCHAR(50),
-    formafarmaceutica integer
+    formafarmaceutica varchar (50)
 );
 
-CREATE TABLE Principio_Activo (
-    principioactivo VARCHAR(50) PRIMARY KEY,
-    unidadmedida VARCHAR(12),
-    unidadreferencia VARCHAR(12)
+CREATE TABLE Control_Unico_Medicamentos (
+    consecutivocum INTEGER SERIAL PRIMARY KEY,
+    expediente INTEGER REFERENCES MEDICAMENTO(expediente),
+    expedientecum INTEGER,
+    cantidadcum INTEGER,
+    estadocum VARCHAR(50),
+    fechaactivo DATE,
+    fechainactivo DATE,
+    muestramedica BOOLEAN
 );
 
 CREATE TABLE Composicion_Medicamento (
@@ -30,16 +35,12 @@ CREATE TABLE Registro_Sanitario (
     estadoregistro VARCHAR(50)
 );
 
-CREATE TABLE Control_Unico_Medicamentos (
-    consecutivocum INTEGER SERIAL PRIMARY KEY,
-    expediente INTEGER REFERENCES MEDICAMENTO(expediente),
-    expedientecum INTEGER,
-    cantidadcum INTEGER,
-    estadocum VARCHAR(50),
-    fechaactivo DATE,
-    fechainactivo DATE,
-    muestramedica BOOLEAN
+CREATE TABLE Principio_Activo (
+    principioactivo VARCHAR(50) PRIMARY KEY,
+    unidadmedida VARCHAR(12),
+    unidadreferencia VARCHAR(12)
 );
+
 
 CREATE TABLE Rol_Medicamento (
     nombrerol VARCHAR(50) PRIMARY KEY,
