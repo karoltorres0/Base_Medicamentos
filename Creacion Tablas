@@ -1,16 +1,16 @@
 CREATE TABLE Medicamento (
     expediente varchar (50) PRIMARY KEY,
-    IUM varchar (50),
     producto VARCHAR(100),
     descripcioncomercial varchar (500),
     atc VARCHAR(50),
-    formafarmaceutica varchar (50)
+    formafarmaceutica varchar (50),
+    IUM varchar (50),
 );
 
 CREATE TABLE Control_Unico_Medicamentos (
-    consecutivocum INTEGER SERIAL PRIMARY KEY,
-    expediente INTEGER REFERENCES MEDICAMENTO(expediente),
-    expedientecum INTEGER,
+    consecutivocum INTEGER PRIMARY KEY,
+    expediente varchar (50) REFERENCES MEDICAMENTO(expediente),
+    expedientecum varchar (50),
     cantidadcum INTEGER,
     estadocum VARCHAR(50),
     fechaactivo DATE,
@@ -19,57 +19,50 @@ CREATE TABLE Control_Unico_Medicamentos (
 );
 
 CREATE TABLE Composicion_Medicamento (
-    expediente INTEGER REFERENCES MEDICAMENTO(expediente),
-    principioactivo VARCHAR(50) REFERENCES PRINCIPIO_ACTIVO(principioactivo),
-    concentracion INTEGER,
+    expediente varchar (50) REFERENCES MEDICAMENTO(expediente),
+    principioactivo VARCHAR(500) REFERENCES PRINCIPIO_ACTIVO(principioactivo),
+    concentracion varchar (50),
     cantidad INTEGER,
     PRIMARY KEY (expediente, principioactivo)
 );
 
 CREATE TABLE Registro_Sanitario (
-    registrosanitario NUMERIC (12,0) SERIAL PRIMARY KEY,
-    expediente INTEGER REFERENCES MEDICAMENTO(expediente),
-    titular VARCHAR(50),
+    registrosanitario varchar (50) PRIMARY KEY,
+    expediente varchar (50) REFERENCES MEDICAMENTO(expediente),
+    titular VARCHAR(500),
     fechaexpedicion DATE,
     fechavencimiento DATE,
     estadoregistro VARCHAR(50)
 );
 
 CREATE TABLE Principio_Activo (
-    principioactivo VARCHAR(50) PRIMARY KEY,
+    principioactivo VARCHAR(500) PRIMARY KEY,
     unidadmedida VARCHAR(12),
-    unidadreferencia VARCHAR(12)
+    unidadreferencia VARCHAR(500)
 );
 
-
 CREATE TABLE Rol_Medicamento (
-    nombrerol VARCHAR(50) PRIMARY KEY,
-    registrosanitario NUMERIC (12,0) REFERENCES REGISTRO_SANITARIO(registrosanitario),
-    tiporol VARCHAR(50) NOT NULL,
+    nombrerol VARCHAR(500) PRIMARY KEY,
+    registrosanitario VARCHAR (50) REFERENCES REGISTRO_SANITARIO(registrosanitario),
+    tiporol VARCHAR(50),
     descripcionatc VARCHAR(250),
     modalidad VARCHAR(50)
 );
 
 COPY Medicamento (expediente, producto, descripcioncomercial, atc, formafarmaceutica, IUM)
-FROM 'C:/PC/Downloads/Medicamento.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
-
-COPY Principio_Activo (principioactivo, unidadmedida, unidadreferenciada)
-FROM 'C:/PC/Downloads/Principio_Activo.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
-
-COPY Composicion_Medicamento (expediente, principioactivo, concentracion, cantidad)
-FROM 'C:/PC/Downloads/Composicion_Medicamento.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
-
-COPY Registro_Sanitario (registrosanitario, expediente, titular, fechaexpedicion, fechavencimiento, estadoregistro)
-FROM 'C:/PC/Downloads/Registro_Sanitario.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
+FROM 'C:\Users\Public\Medicamento.csv' DELIMITER AS ';' CSV HEADER;
 
 COPY Control_Unico_Medicamentos (consecutivocum, expediente, expedientecum, cantidadcum, estadocum, fechaactivo, fechainactivo, muestramedica)
-FROM 'C:/PC/Downloads/Control_Unico_Medicamentos.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
+FROM 'C:\Users\Public\Control_Unico_Medicamentos.csv' DELIMITER AS ';' CSV HEADER;
+
+COPY Composicion_Medicamento (expediente, principioactivo, concentracion, cantidad)
+FROM 'C:\Users\Public\Composicion_Medicamento.csv' DELIMITER AS ';' CSV HEADER;
+
+COPY Registro_Sanitario (registrosanitario, expediente, titular, fechaexpedicion, fechavencimiento, estadoregistro)
+FROM 'C:\Users\Public\Registro_Sanitario.csv' DELIMITER AS ';' CSV HEADER;
+
+COPY Principio_Activo (principioactivo, unidadmedida, unidadreferenciada)
+FROM 'C:\Users\Public\Principio_Activo.csv' DELIMITER AS ';' CSV HEADER;
 
 COPY Rol_Medicamento (nombrerol, registrosanitario, tiporol, descripcionatc, modalidad)
-FROM 'C:/PC/Downloads/Rol_Medicamento.csv' 
-WITH DELIMITER AS ';' CSV HEADER;
+FROM 'C:\Users\Public\Rol_Medicamento.csv' DELIMITER AS ';' CSV HEADER;
