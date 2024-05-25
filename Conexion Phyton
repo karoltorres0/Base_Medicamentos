@@ -44,15 +44,6 @@ password = "123456789"
 # Conexión a PostgreSQL
 conn = connect_to_postgres(host, database, user, password)
 
-# Ejemplo de consulta SQL
-query = "SELECT * FROM nombre_de_tabla LIMIT 5;"  # Reemplaza nombre_de_tabla por el nombre de tu tabla
-result = execute_query(conn, query)
-if result:
-    print("Resultado de la consulta:")
-    for row in result:
-        print(row)
 
-# Cerrar la conexión
-close_connection(conn)
 
 
