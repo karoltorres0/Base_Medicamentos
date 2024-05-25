@@ -1,53 +1,58 @@
+from dash import Dash, html, dcc
+import plotly.express as px
 import psycopg2
-from psycopg2 import Error
 
-def conectar():
+def connect_to_postgres(host, database, user, password):
+    """Establece la conexión a la base de datos PostgreSQL."""
     try:
-        dbname = 'Base_Datos_Medicamentos'
-        user = 'postgres'
-        password = '123456789'
-        host = 'localhost'  
-
-        conexion = psycopg2.connect(dbname=dbname, user=user, password=password, host=host)
-        print("Conexión exitosa")
-
-        return conexion
-
-    except Error as e:
-        print("Error al conectar a la base de datos:", e)
+        conn = psycopg2.connect(
+            host='localhost',
+            database='Base_Datos_Medicamentos',
+            user='postgres',
+            password='123456789'
+        )
+        print("¡Conexión exitosa a PostgreSQL!")
+        return conn
+    except psycopg2.Error as e:
+        print("Error al conectar a PostgreSQL:", e)
         return None
 
-def consultar_medicamentos(conexion):
+def execute_query(conn, query):
+    """Ejecuta una consulta SQL en la base de datos."""
     try:
-        cursor = conexion.cursor()
-
-        consulta = "SELECT * FROM Medicamento;"
-
-        cursor.execute(consulta)
-
-        datos = cursor.fetchall()
-
-        for fila in datos:
-            print(fila)
-
-    except Error as e:
+        cursor = conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+    except psycopg2.Error as e:
         print("Error al ejecutar la consulta:", e)
+        return None
 
-    finally:
+def close_connection(conn):
+    """Cierra la conexión a la base de datos."""
+    if conn is not None:
+        conn.close()
+        print("Conexión cerrada.")
 
-        if cursor:
-            cursor.close()
+# Parámetros de conexión
+host = "localhost"
+database = "Base_Datos_Medicamentos"
+user = "postgres"
+password = "123456789"
 
-def main():
+# Conexión a PostgreSQL
+conn = connect_to_postgres(host, database, user, password)
 
-    conexion = conectar()
+# Ejemplo de consulta SQL
+query = "SELECT * FROM nombre_de_tabla LIMIT 5;"  # Reemplaza nombre_de_tabla por el nombre de tu tabla
+result = execute_query(conn, query)
+if result:
+    print("Resultado de la consulta:")
+    for row in result:
+        print(row)
 
-    if conexion:
+# Cerrar la conexión
+close_connection(conn)
 
-        consultar_medicamentos(conexion)
 
-        conexion.close()
-        print("Conexión cerrada")
-
-if __name__ == "__main__":
-    main()
